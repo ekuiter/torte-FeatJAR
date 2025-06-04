@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<extensions>
+	<point id="de.featjar.base.cli.Commands">
+		<extension id="Transform" />
+	</point>
+	<point id="Transformations">
+		<extension id="ModelToDIMACSFeatJAR" />
+		<extension id="ModelToDIMACSFeatureIDE" />
+		<extension id="ModelToUVLFeatureIDE" />
+		<extension id="ModelToXMLFeatureIDE" />
+		<extension id="ModelToModelFeatureIDE" />
+		<extension id="ModelToSMTZ3" />
+		<extension id="ConFigFixFormat" />
+	</point>
+</extensions>

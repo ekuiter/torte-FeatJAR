@@ -1,8 +1,8 @@
 import de.featjar.base.cli.Commands;
 import de.featjar.base.io.IO;
-import de.featjar.formula.io.dimacs.DIMACSFormulaFormat;
-import de.featjar.formula.transformer.ComputeCNFFormula;
-import de.featjar.formula.transformer.ComputeNNFFormula;
+import de.featjar.formula.computation.ComputeCNFFormula;
+import de.featjar.formula.computation.ComputeNNFFormula;
+import de.featjar.formula.io.dimacs.FormulaDimacsFormat;
 
 import java.nio.file.Path;
 import java.time.Duration;
@@ -16,7 +16,7 @@ public class TransformModelToDIMACSWithFeatJAR implements ITransformation {
                     .map(ComputeNNFFormula::new)
                     .map(ComputeCNFFormula::new)
                     .get()
-                    .get(), outputPath, new DIMACSFormulaFormat());
+                    .get(), outputPath, new FormulaDimacsFormat());
         }, timeout);
     }
 }

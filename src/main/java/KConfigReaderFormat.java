@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  * However, that format does not read non-Boolean constraints correctly and writes only CNFs.
  */
 public class KConfigReaderFormat extends AFeatureModelFormat {
-	private static Pattern equivalencePattern = Pattern.compile("def\\(([^()]*?)==CONFIG_(.*?)\\)");
+	private static final Pattern equivalencePattern = Pattern.compile("def\\(([^()]*?)==CONFIG_(.*?)\\)");
 
 	private static class KConfigNodeReader extends NodeReader {
 		KConfigNodeReader() {

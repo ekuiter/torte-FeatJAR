@@ -1,30 +1,28 @@
 import de.featjar.base.Exceptions;
 import de.featjar.base.FeatJAR;
 import de.featjar.base.cli.ICommand;
-import de.featjar.base.cli.IOptionInput;
 import de.featjar.base.cli.Option;
-import de.featjar.base.data.Result;
+import de.featjar.base.cli.OptionList;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
+import static de.featjar.analysis.AAnalysisCommand.TIMEOUT_OPTION;
+
 public class Transform implements ICommand {
-    private static final Option<Path> INPUT_PATH_OPTION = new Option<>("input", Result.mapReturnValue(Paths::get))
-            .setRequired(true)
+    private static final Option<Path> INPUT_PATH_OPTION = Option.newOption("input", Option.PathParser)
             .setDescription("Path to input file");
 
-    private static final Option<Path> OUTPUT_PATH_OPTION = new Option<>("output", Result.mapReturnValue(Paths::get))
-            .setRequired(true)
+    private static final Option<Path> OUTPUT_PATH_OPTION = Option.newOption("output", Option.PathParser)
             .setDescription("Path to output file");
 
-    private static final Option<ITransformation> TRANSFORMATION_OPTION = new Option<>(
-            "transformation", s -> FeatJAR.extensionPoint(Transformations.class).getMatchingExtension(s))
-            .setRequired(true)
+    private static final Option<ITransformation> TRANSFORMATION_OPTION = Option.newOption(
+            "transformation", s -> FeatJAR.extensionPoint(Transformations.class).getMatchingExtension(s).get())
             .setDescription(() -> "Specify transformation by identifier. One of "
                     + FeatJAR.extensionPoint(Transformations.class).getExtensions().stream()
                     .map(ITransformation::getIdentifier)
@@ -37,19 +35,19 @@ public class Transform implements ICommand {
     }
 
     @Override
-    public String getDescription() {
-        return "Transforms feature-model formulas";
+    public Optional<String> getDescription() {
+        return Optional.of("Transforms feature-model formulas");
     }
 
     @Override
-    public void run(IOptionInput optionParser) {
-        Path inputPath = optionParser.get(INPUT_PATH_OPTION).orElseThrow();
-        Path outputPath = optionParser.get(OUTPUT_PATH_OPTION).orElseThrow();
-        Duration timeout = optionParser.get(TIMEOUT_OPTION).orElseThrow();
+    public int run(OptionList optionParser) {
+        Path inputPath = optionParser.get(INPUT_PATH_OPTION);
+        Path outputPath = optionParser.get(OUTPUT_PATH_OPTION);
+        Duration timeout = optionParser.get(TIMEOUT_OPTION);
         if (timeout.equals(Duration.ZERO))
             timeout = null;
         ITransformation transformation =
-                optionParser.get(TRANSFORMATION_OPTION).orElseThrow();
+                optionParser.get(TRANSFORMATION_OPTION);
         if (!Files.exists(inputPath)) {
             throw new IllegalArgumentException("input file " + inputPath + " does not exist");
         }
@@ -67,5 +65,6 @@ public class Transform implements ICommand {
             } else
                 throw new RuntimeException(e);
         }
+        return 0;
     }
 }

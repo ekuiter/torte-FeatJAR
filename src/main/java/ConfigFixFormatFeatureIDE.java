@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class ConfigFixFormatFeatureIDE extends AFeatureModelFormat {
 
-	private static Pattern equivalencePattern = Pattern.compile("definedEx\\((Choice_[\\w\\d_]+)\\)");
+	private static final Pattern equivalencePattern = Pattern.compile("definedEx\\((Choice_[\\w\\d_]+)\\)");
 	
 	private static class KConfigNodeReader extends NodeReader {
 		KConfigNodeReader() {

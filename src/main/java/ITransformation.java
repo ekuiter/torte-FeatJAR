@@ -2,7 +2,7 @@ import de.featjar.base.FeatJAR;
 import de.featjar.base.extension.IExtension;
 import de.featjar.base.io.IO;
 import de.featjar.formula.io.FormulaFormats;
-import de.featjar.formula.structure.formula.IFormula;
+import de.featjar.formula.structure.IFormula;
 import de.ovgu.featureide.fm.core.base.IFeatureModel;
 import de.ovgu.featureide.fm.core.base.impl.FMFormatManager;
 import de.ovgu.featureide.fm.core.init.FMCoreLibrary;
@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
-import java.util.Optional;
 
 public interface ITransformation extends IExtension {
     void transform(Path inputPath, Path outputPath, Duration timeout) throws Exception;

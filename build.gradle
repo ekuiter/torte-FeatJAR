@@ -4,5 +4,6 @@ plugins {
 
 dependencies {
     implementation 'de.featjar:formula-analysis-javasmt'
+    implementation 'de.featjar:uvl'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 }

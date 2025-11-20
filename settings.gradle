@@ -3,3 +3,4 @@ pluginManagement {
 }
 
 includeBuild '../formula-analysis-javasmt'
+includeBuild '../uvl'

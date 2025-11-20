@@ -5,12 +5,12 @@ import de.ovgu.featureide.fm.core.io.xml.XmlFeatureModelFormat;
 import java.nio.file.Path;
 import java.time.Duration;
 
-public class TransformModelToXMLWithFeatureIDE implements ITransformation {
+public class TransformToXMLWithFeatureIDE implements ITransformation {
     public void transform(Path inputPath, Path outputPath, Duration timeout) {
         Commands.runInThread(() -> {
             FileHandler.save(
                     outputPath,
-                    ITransformation.loadModelFileWithFeatureIDE(inputPath),
+                    ITransformation.loadFormulaFileWithFeatureIDE(inputPath),
                     new XmlFeatureModelFormat());
         }, timeout);
     }

@@ -9,10 +9,10 @@ import java.time.Duration;
 
 import static de.featjar.base.computation.Computations.async;
 
-public class TransformModelToDIMACSWithFeatJAR implements ITransformation {
+public class TransformToDIMACSWithFeatJAR implements ITransformation {
     public void transform(Path inputPath, Path outputPath, Duration timeout) {
         Commands.runInThread(() -> {
-            IO.save(async(ITransformation.loadModelFileWithFeatJAR(inputPath))
+            IO.save(async(ITransformation.loadFormulaFileWithFeatJAR(inputPath))
                     .map(ComputeNNFFormula::new)
                     .map(ComputeCNFFormula::new)
                     .get()

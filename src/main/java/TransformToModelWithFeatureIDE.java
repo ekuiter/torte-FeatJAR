@@ -6,7 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
 
-public class TransformModelToModelWithFeatureIDE implements ITransformation {
+public class TransformToModelWithFeatureIDE implements ITransformation {
 
 
     public void transform(Path inputPath, Path outputPath, Duration timeout) {
@@ -17,13 +17,13 @@ public class TransformModelToModelWithFeatureIDE implements ITransformation {
                 if (content.contains("definedEx(")) {
                     FileHandler.save(
                             outputPath,
-                            ITransformation.loadModelFileWithFeatureIDE(inputPath),
+                            ITransformation.loadFormulaFileWithFeatureIDE(inputPath),
                             new ConfigFixFormatFeatureIDE()
                     );
                 } else {
                     FileHandler.save(
                             outputPath,
-                            ITransformation.loadModelFileWithFeatureIDE(inputPath),
+                            ITransformation.loadFormulaFileWithFeatureIDE(inputPath),
                             new KConfigReaderFormat()
                     );
                 }

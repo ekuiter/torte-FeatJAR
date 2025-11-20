@@ -17,7 +17,7 @@ import java.time.Duration;
 public interface ITransformation extends IExtension {
     void transform(Path inputPath, Path outputPath, Duration timeout) throws Exception;
 
-    static IFormula loadModelFileWithFeatJAR(Path inputPath) {
+    static IFormula loadFormulaFileWithFeatJAR(Path inputPath) {
         try {
             String content = Files.readString(inputPath);
             // to do ConfigFix: can we do this a bit more elegantly? maybe actually introduce a new file extension for ConfigFix, which then gets transformed into standard model format?
@@ -33,7 +33,7 @@ public interface ITransformation extends IExtension {
         }
     }
 
-    static IFeatureModel loadModelFileWithFeatureIDE(Path inputPath) throws IOException {
+    static IFeatureModel loadFormulaFileWithFeatureIDE(Path inputPath) throws IOException {
         LibraryManager.registerLibrary(FMCoreLibrary.getInstance());
 
         String content = Files.readString(inputPath);

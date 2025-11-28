@@ -11,25 +11,11 @@ public class TransformToModelWithFeatureIDE implements ITransformation {
 
     public void transform(Path inputPath, Path outputPath, Duration timeout) {
         Commands.runInThread(() -> {
-            // to do ConfigFix: can we do this a bit more elegantly and revert the merge commit?
-            try {
-                String content = Files.readString(inputPath);
-                if (content.contains("definedEx(")) {
-                    FileHandler.save(
-                            outputPath,
-                            ITransformation.loadFormulaFileWithFeatureIDE(inputPath),
-                            new ConfigFixFormatFeatureIDE()
-                    );
-                } else {
-                    FileHandler.save(
-                            outputPath,
-                            ITransformation.loadFormulaFileWithFeatureIDE(inputPath),
-                            new KConfigReaderFormat()
-                    );
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            FileHandler.save(
+                    outputPath,
+                    ITransformation.loadFormulaFileWithFeatureIDE(inputPath),
+                    new KConfigReaderFormat()
+            );
         }, timeout);
     }
 }

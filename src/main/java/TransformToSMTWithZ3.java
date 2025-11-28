@@ -21,30 +21,14 @@ import java.io.IOException;
 public class TransformToSMTWithZ3 implements ITransformation {
     public void transform(Path inputPath, Path outputPath, Duration timeout) {
         Commands.runInThread(() -> {
-            // to do ConfigFix: can we do this a bit more elegantly and revert the merge commit?
             try {
-                IFormula formula;
-                String content = Files.readString(inputPath);
-                if (content.contains("definedEx(")) {
-                    formula = (IFormula) IO.load(inputPath, new ConfigFixFormatFeatJAR())
-                            .orElseThrow(p -> new RuntimeException("failed to load feature model at " + inputPath));
-                            Files.write(outputPath, formulaToSMTString(formula).getBytes());
-                } else {
-                    formula = IO.load(inputPath,  FeatJAR.extensionPoint(FormulaFormats.class))
-                            .orElseThrow(p -> new RuntimeException("failed to load feature model at " + inputPath));
-                        Files.write(outputPath, formulaToSMTString(formula).getBytes());
-                }
+                IFormula formula = IO.load(inputPath,  FeatJAR.extensionPoint(FormulaFormats.class))
+                        .orElseThrow(p -> new RuntimeException("failed to load feature model at " + inputPath));
+                Files.write(outputPath, formulaToSMTString(formula).getBytes());
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }, timeout);
-
-
-//        Files.write(Paths.get(parameters.tempPath).resolve(
-//                        String.format("%s_%d.stats",
-//                                parameters.system.replaceAll("[/]", "_"),
-//                                parameters.iteration)),
-//                (variableMap.size() + " " + Trees.traverse(formula, new LiteralsCounter()).get()).getBytes());
     }
 
     private static String formulaToSMTString(IFormula formula) throws InvalidConfigurationException {

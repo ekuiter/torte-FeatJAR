@@ -18,31 +18,13 @@ public interface ITransformation extends IExtension {
     void transform(Path inputPath, Path outputPath, Duration timeout) throws Exception;
 
     static IFormula loadFormulaFileWithFeatJAR(Path inputPath) {
-        try {
-            String content = Files.readString(inputPath);
-            // to do ConfigFix: can we do this a bit more elegantly? maybe actually introduce a new file extension for ConfigFix, which then gets transformed into standard model format?
-            if (content.contains("definedEx(")) {
-                return (IFormula) IO.load(inputPath, new ConfigFixFormatFeatJAR())
-                            .orElseThrow(p -> new RuntimeException("failed to load feature model at " + inputPath));
-            } else {
-                return (IFormula) IO.load(inputPath,  FeatJAR.extensionPoint(FormulaFormats.class))
-                            .orElseThrow(p -> new RuntimeException("failed to load feature model at " + inputPath));
-            }
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to read file: " + inputPath, e);
-        }
+        return IO.load(inputPath, FeatJAR.extensionPoint(FormulaFormats.class))
+                .orElseThrow(p -> new RuntimeException("failed to load feature model at " + inputPath));
     }
 
-    static IFeatureModel loadFormulaFileWithFeatureIDE(Path inputPath) throws IOException {
+    static IFeatureModel loadFormulaFileWithFeatureIDE(Path inputPath) {
         LibraryManager.registerLibrary(FMCoreLibrary.getInstance());
-
-        String content = Files.readString(inputPath);
-        if (content.contains("definedEx(")) {
-            FMFormatManager.getInstance().addExtension(new ConfigFixFormatFeatureIDE());
-        } else {
-            FMFormatManager.getInstance().addExtension(new KConfigReaderFormat());
-        }
-
+        FMFormatManager.getInstance().addExtension(new KConfigReaderFormat());
         IFeatureModel featureModel = FeatureModelManager.load(inputPath);
         if (featureModel == null) {
             throw new RuntimeException("Failed to load feature model at " + inputPath);

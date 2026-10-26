@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
     implementation 'de.featjar:formula-analysis-javasmt'
+    implementation 'org.sosy-lab:java-smt:3.12.0'
     implementation 'de.featjar:uvl'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 }

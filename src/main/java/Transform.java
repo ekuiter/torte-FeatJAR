@@ -2,7 +2,8 @@ import de.featjar.base.Exceptions;
 import de.featjar.base.FeatJAR;
 import de.featjar.base.cli.ICommand;
 import de.featjar.base.cli.Option;
-import de.featjar.base.cli.OptionList;
+import de.featjar.base.cli.OptionParser;
+import de.featjar.base.cli.Options;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,14 +16,14 @@ import java.util.stream.Collectors;
 import static de.featjar.analysis.AAnalysisCommand.TIMEOUT_OPTION;
 
 public class Transform implements ICommand {
-    private static final Option<Path> INPUT_PATH_OPTION = Option.newOption("input", Option.PathParser)
+    private static final Option<Path> INPUT_PATH_OPTION = Options.newOption("input", Options.PathParser)
             .setDescription("Path to input file");
 
-    private static final Option<Path> OUTPUT_PATH_OPTION = Option.newOption("output", Option.PathParser)
+    private static final Option<Path> OUTPUT_PATH_OPTION = Options.newOption("output", Options.PathParser)
             .setDescription("Path to output file");
 
-    private static final Option<ITransformation> TRANSFORMATION_OPTION = Option.newOption(
-            "transformation", s -> FeatJAR.extensionPoint(Transformations.class).getMatchingExtension(s).get())
+    private static final Option<ITransformation> TRANSFORMATION_OPTION = Options.newOption(
+            "transformation", Options.parser(s -> FeatJAR.extensionPoint(Transformations.class).getMatchingExtension(s).get()))
             .setDescription(() -> "Specify transformation by identifier. One of "
                     + FeatJAR.extensionPoint(Transformations.class).getExtensions().stream()
                     .map(ITransformation::getIdentifier)
@@ -40,7 +41,7 @@ public class Transform implements ICommand {
     }
 
     @Override
-    public int run(OptionList optionParser) {
+    public int run(OptionParser optionParser) {
         Path inputPath = optionParser.get(INPUT_PATH_OPTION);
         Path outputPath = optionParser.get(OUTPUT_PATH_OPTION);
         Duration timeout = optionParser.get(TIMEOUT_OPTION);

@@ -15,10 +15,6 @@ git clone https://github.com/ekuiter/torte-FeatJAR.git
 java -jar torte-FeatJAR/build/libs/torte-FeatJAR-all.jar --help
 ```
 
-The adapter uses FeatureIDE 3.12.0. JavaSMT is declared directly because the
-adapter uses its API for SMT export; its native solver resources are provided
-by the monorepo's `formula-analysis-javasmt` module. For the tested FeatJAR
-revision, see torte's `src/docker/featjar/Dockerfile`.
 
 ## License
 

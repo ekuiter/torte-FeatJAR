@@ -15,7 +15,6 @@ git clone https://github.com/ekuiter/torte-FeatJAR.git
 java -jar torte-FeatJAR/build/libs/torte-FeatJAR-all.jar --help
 ```
 
-
 ## License
 
 The source code of this project is released under the [LGPL v3 license](LICENSE.txt).

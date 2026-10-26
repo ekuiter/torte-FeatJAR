@@ -50,7 +50,8 @@ public class Transform implements ICommand {
         ITransformation transformation =
                 optionParser.get(TRANSFORMATION_OPTION);
         if (!Files.exists(inputPath)) {
-            throw new IllegalArgumentException("input file " + inputPath + " does not exist");
+            FeatJAR.log().error("input file " + inputPath + " does not exist");
+            return 1;
         }
         FeatJAR.log().info("transforming");
         FeatJAR.log().info(String.format("input: %s", inputPath));
@@ -63,8 +64,10 @@ public class Transform implements ICommand {
             if (Exceptions.isCausedBy(e, TimeoutException.class)) {
                 System.err.printf("transformation of %s aborted due to timeout%n", inputPath);
                 System.exit(0);
-            } else
-                throw new RuntimeException(e);
+            } else {
+                FeatJAR.log().error(e);
+                return 1;
+            }
         }
         return 0;
     }

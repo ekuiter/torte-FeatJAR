@@ -2,11 +2,25 @@ plugins {
     id 'de.featjar.java-application'
 }
 
+configurations {
+    featureide
+}
+
+// FeatureIDE and FeatJAR need incompatible UVL parsers with identical packages.
+// Relocate FeatureIDE's copy and its ANTLR runtime before building the main jar.
+def isolatedFeatureIDE = tasks.register('isolateFeatureIDE', com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar) {
+    archiveClassifier = 'featureide'
+    configurations = [project.configurations.featureide]
+    relocate 'de.vill', 'torte.featureide.uvl'
+    relocate 'org.antlr', 'torte.featureide.antlr'
+}
+
 dependencies {
     implementation 'de.featjar:formula-analysis-javasmt'
     implementation 'org.sosy-lab:java-smt:3.12.0'
     implementation 'de.featjar:uvl'
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    featureide fileTree(dir: 'libs', include: ['*.jar'])
+    implementation files(isolatedFeatureIDE)
 }
 
 tasks.named('shadowJar') {

@@ -1,8 +1,5 @@
 import de.featjar.analysis.javasmt.solver.FormulaToJavaSMT;
-import de.featjar.base.FeatJAR;
 import de.featjar.base.cli.Commands;
-import de.featjar.base.io.IO;
-import de.featjar.formula.io.FormulaFormats;
 import de.featjar.formula.structure.IFormula;
 import org.sosy_lab.common.ShutdownManager;
 import org.sosy_lab.common.configuration.Configuration;
@@ -22,8 +19,7 @@ public class TransformToSMTWithZ3 implements ITransformation {
     public void transform(Path inputPath, Path outputPath, Duration timeout) {
         Commands.runInThread(() -> {
             try {
-                IFormula formula = IO.load(inputPath,  FeatJAR.extensionPoint(FormulaFormats.class))
-                        .orElseThrow(p -> new RuntimeException("failed to load feature model at " + inputPath));
+                IFormula formula = ITransformation.loadFormulaFileWithFeatJAR(inputPath);
                 Files.write(outputPath, formulaToSMTString(formula).getBytes());
             } catch (IOException e) {
                 e.printStackTrace();

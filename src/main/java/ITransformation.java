@@ -2,6 +2,7 @@ import de.featjar.base.FeatJAR;
 import de.featjar.base.extension.IExtension;
 import de.featjar.base.io.IO;
 import de.featjar.formula.io.FormulaFormats;
+import de.featjar.formula.io.ExpressionFormats;
 import de.featjar.formula.structure.IFormula;
 import de.ovgu.featureide.fm.core.base.IFeatureModel;
 import de.ovgu.featureide.fm.core.base.impl.FMFormatManager;
@@ -19,7 +20,14 @@ public interface ITransformation extends IExtension {
 
     static IFormula loadFormulaFileWithFeatJAR(Path inputPath) {
         return IO.load(inputPath, FeatJAR.extensionPoint(FormulaFormats.class))
-                .orElseThrow(p -> new RuntimeException("failed to load feature model at " + inputPath));
+                .orElseGet(() -> IO.load(inputPath, FeatJAR.extensionPoint(ExpressionFormats.class))
+                        .map(expression -> {
+                            if (expression instanceof IFormula formula) {
+                                return formula;
+                            }
+                            throw new IllegalArgumentException("expected a Boolean formula at " + inputPath);
+                        })
+                        .orElseThrow(p -> new RuntimeException("failed to load feature model at " + inputPath)));
     }
 
     static IFeatureModel loadFormulaFileWithFeatureIDE(Path inputPath) {

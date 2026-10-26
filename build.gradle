@@ -8,3 +8,7 @@ dependencies {
     implementation 'de.featjar:uvl'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 }
+
+tasks.named('shadowJar') {
+    archiveFileName = 'torte-FeatJAR-all.jar'
+}
